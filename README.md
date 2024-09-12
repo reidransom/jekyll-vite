@@ -90,6 +90,16 @@ bundle install
 bundle exec vite install
 ```
 
+Add the following to `vite.config.ts`
+
+```js
+  experimental: {
+    renderBuiltUrl(filename, { hostID, hostType, type }) {
+      return process.env['ASSET_BASE_URL'] + '/' + filename
+    },
+  },
+```
+
 Additional [installation instructions][installation] are available in the [documentation website][installation].
 
 ## Contact ✉️
