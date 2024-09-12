@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'byebug'
-
 # Internal: Base class for all tags.
 class Jekyll::Vite::Tag < Jekyll::Tags::IncludeTag
   include Jekyll::Filters::URLFilters
