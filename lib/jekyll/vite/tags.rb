@@ -25,7 +25,10 @@ protected
 
   # Internal: Resolves the path for the specified Vite asset.
   def vite_asset_path(name, **options)
-    vite_manifest.path_for(name, **options)
+    manpath = vite_manifest.path_for(name, **options)
+    baseurl = ENV['ASSET_BASE_URL']
+    manpath ['/vite/'] = '/' if baseurl && manpath.start_with?('/vite/')
+    baseurl + manpath
   end
 
   # Internal: Returns the current manifest loaded by Vite Ruby.
