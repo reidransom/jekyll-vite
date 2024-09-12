@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'byebug'
+
 # Internal: Base class for all tags.
 class Jekyll::Vite::Tag < Jekyll::Tags::IncludeTag
   include Jekyll::Filters::URLFilters
@@ -23,12 +25,16 @@ class Jekyll::Vite::Tag < Jekyll::Tags::IncludeTag
 
 protected
 
-  # Internal: Resolves the path for the specified Vite asset.
-  def vite_asset_path(name, **options)
-    manpath = vite_manifest.path_for(name, **options)
+  def rebase_path(manpath)
     baseurl = ENV['ASSET_BASE_URL']
     manpath ['/vite/'] = '/' if baseurl && manpath.start_with?('/vite/')
     baseurl + manpath
+  end
+
+  # Internal: Resolves the path for the specified Vite asset.
+  def vite_asset_path(name, **options)
+    manpath = vite_manifest.path_for(name, **options)
+    rebase_path(manpath)
   end
 
   # Internal: Returns the current manifest loaded by Vite Ruby.
@@ -55,7 +61,7 @@ protected
 
   # Internal: Renders HTML script tags.
   def script_tags(sources, **attrs)
-    sources.map { |src| tag(:script, src: src, **attrs) }.join("\n")
+    sources.map { |src| tag(:script, src: rebase_path(src), **attrs) }.join("\n")
   end
 
   # Internal: Adds entrypoint files managed by Vite as a dependency in the
