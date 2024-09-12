@@ -24,8 +24,8 @@ class Jekyll::Vite::Tag < Jekyll::Tags::IncludeTag
 protected
 
   def rebase_path(manpath)
-    baseurl = ENV['ASSET_BASE_URL']
-    manpath ['/vite/'] = '/' if baseurl && manpath.start_with?('/vite/')
+    baseurl = ENV['ASSET_BASE_URL'] || ''
+    manpath ['/vite/'] = '/' if baseurl != '' && manpath.start_with?('/vite/')
     baseurl + manpath
   end
 
